@@ -16,18 +16,14 @@ template <typename T>
 class myStack : public AbstractStack<T> {
 private:
     T* arr;
-    T* minArr;
     int topIndex;
-    int minTop;
     int maxSize;
 
 public:
     myStack(int size) {
         maxSize = size;
         arr = new T[maxSize];
-        minArr = new T[maxSize];
         topIndex = -1;
-        minTop = -1;
     }
 
     void push(T value) {
@@ -35,10 +31,6 @@ public:
             cout << "Stack is Full!\n";
         } else {
             arr[++topIndex] = value;
-
-            if (minTop == -1 || value <= minArr[minTop]) {
-                minArr[++minTop] = value;
-            }
         }
     }
 
@@ -47,11 +39,7 @@ public:
             cout << "Stack is Empty!\n";
             return -1;
         } else {
-            T val = arr[topIndex--];
-            if (val == minArr[minTop]) {
-                minTop--;
-            }
-            return val;
+            return arr[topIndex--];
         }
     }
 
@@ -59,8 +47,9 @@ public:
         if (isEmpty()) {
             cout << "Stack is Empty!\n";
             return -1;
+        } else {
+            return arr[topIndex];
         }
-        return arr[topIndex];
     }
 
     bool isEmpty() const {
@@ -82,17 +71,8 @@ public:
         }
     }
 
-    T getMin() const {
-        if (minTop == -1) {
-            cout << "Stack is Empty!\n";
-            return -1;
-        }
-        return minArr[minTop];
-    }
-
     ~myStack() {
         delete[] arr;
-        delete[] minArr;
     }
 };
 
@@ -106,7 +86,7 @@ int main() {
     int choice, value;
 
     do {
-        cout << "\n1. Push element\n2. Pop element\n3. Show top element\n4. Check if stack is empty\n5. Check if stack is full\n6. Display stack elements\n7. Show minimum element\n8. Exit\n";
+        cout << "\n1. Push\n2. Pop\n3. Top\n4. Display\n5. Exit\n";
         cout << "Enter choice: ";
         cin >> choice;
 
@@ -123,24 +103,14 @@ int main() {
             cout << "Top: " << s.top() << endl;
             break;
         case 4:
-            cout << (s.isEmpty() ? "Stack is Empty\n" : "Stack is not Empty\n");
-            break;
-        case 5:
-            cout << (s.isFull() ? "Stack is Full\n" : "Stack is not Full\n");
-            break;
-        case 6:
             s.display();
             break;
-        case 7:
-            cout << "Minimum: " << s.getMin() << endl;
-            break;
-        case 8:
+        case 5:
             break;
         default:
-            cout << "Invalid choice\n";
+            cout << "Invalid choice!\n";
         }
-
-    } while (choice != 8);
+    } while (choice != 5);
 
     return 0;
 }
